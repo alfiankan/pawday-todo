@@ -21,3 +21,8 @@ window/stretch/aspect="expand"
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+limits/global_shader_variables/buffer_size=16384
+
+[audio]
+
+driver/mix_rate=44100

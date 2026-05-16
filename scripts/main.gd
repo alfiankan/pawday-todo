@@ -131,8 +131,8 @@ func _draw_townhall() -> void:
 	draw_circle(Vector2(126, 72), tower_radius, wall_color)
 	draw_circle(Vector2(-126, 102), 34, wall_shadow)
 	draw_circle(Vector2(126, 102), 34, wall_shadow)
-	draw_circle(Vector2(-126, 72), tower_radius, outline, false, 5.0)
-	draw_circle(Vector2(126, 72), tower_radius, outline, false, 5.0)
+	draw_arc(Vector2(-126, 72), tower_radius, 0.0, TAU, 48, outline, 5.0)
+	draw_arc(Vector2(126, 72), tower_radius, 0.0, TAU, 48, outline, 5.0)
 
 	draw_rect(palace_base, wall_color, true)
 	draw_rect(Rect2(palace_base.position + Vector2(0, 114), Vector2(palace_base.size.x, 54)), wall_shadow, true)
