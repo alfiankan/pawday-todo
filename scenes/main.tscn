@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvrvpplxpx58y"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_7nivg"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_7nivg")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 0)
+enabled = true
+position_smoothing_enabled = true
+position_smoothing_speed = 12.0
