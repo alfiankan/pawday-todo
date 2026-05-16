@@ -28,6 +28,8 @@ jobs:
         run: |
           mkdir -p dist/web
           docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace barichello/godot-ci:4.2.2 godot --headless --export-release Web dist/web/index.html
+          cp web/coi-serviceworker.js dist/web/coi-serviceworker.js
+          perl -0777 -i -pe "s|</head>|<script src=\"coi-serviceworker.js\"></script>\\n</head>| unless /coi-serviceworker\\.js/" dist/web/index.html
           touch dist/web/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

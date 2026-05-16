@@ -22,4 +22,4 @@ godot --headless --export-release Web dist/web/index.html
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/pages.yml`, exports the Godot web build, and deploys it to GitHub Pages.
+Pushing to `main` triggers `.github/workflows/pages.yml`, exports the Godot web build, injects `coi-serviceworker.js` (for SharedArrayBuffer/Cross-Origin Isolation compatibility on GitHub Pages), and deploys it.
