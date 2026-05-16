@@ -10,3 +10,33 @@ position = Vector2(0, 0)
 enabled = true
 position_smoothing_enabled = true
 position_smoothing_speed = 12.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TownhallPopup" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 360.0
+offset_bottom = 270.0
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/TownhallPopup"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="CanvasLayer/TownhallPopup/VBox"]
+layout_mode = 2
+text = "Cathouse Kingdom Hall"
+
+[node name="Details" type="Label" parent="CanvasLayer/TownhallPopup/VBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Level details"
+
+[node name="UpgradeButton" type="Button" parent="CanvasLayer/TownhallPopup/VBox"]
+layout_mode = 2
+text = "Upgrade"
+
+[node name="CloseButton" type="Button" parent="CanvasLayer/TownhallPopup/VBox"]
+layout_mode = 2
+text = "Close"
