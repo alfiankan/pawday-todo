@@ -63,18 +63,35 @@ func _draw() -> void:
 
 func _draw_map() -> void:
 	var top_left := -MAP_SIZE / 2.0
-	draw_rect(Rect2(top_left, MAP_SIZE), Color("#6fb264"), true)
+	draw_rect(Rect2(top_left, MAP_SIZE), Color("#7fd06d"), true)
 
 	for x in range(int(top_left.x), int(top_left.x + MAP_SIZE.x) + 1, int(TILE_SIZE)):
-		draw_line(Vector2(x, top_left.y), Vector2(x, top_left.y + MAP_SIZE.y), Color(0.2, 0.35, 0.2, 0.14), 2.0)
+		draw_line(Vector2(x, top_left.y), Vector2(x, top_left.y + MAP_SIZE.y), Color(0.2, 0.45, 0.18, 0.10), 2.0)
 	for y in range(int(top_left.y), int(top_left.y + MAP_SIZE.y) + 1, int(TILE_SIZE)):
-		draw_line(Vector2(top_left.x, y), Vector2(top_left.x + MAP_SIZE.x, y), Color(0.2, 0.35, 0.2, 0.14), 2.0)
+		draw_line(Vector2(top_left.x, y), Vector2(top_left.x + MAP_SIZE.x, y), Color(0.2, 0.45, 0.18, 0.10), 2.0)
 
-	draw_circle(Vector2(-420, -180), 200, Color("#7cc66e"))
-	draw_circle(Vector2(530, 260), 170, Color("#66a85b"))
-	draw_circle(Vector2(740, -420), 150, Color("#88cf79"))
-	draw_circle(Vector2(-120, 380), 130, Color("#75bd69"))
-	draw_circle(Vector2(180, -300), 160, Color("#5f9d56"))
+	draw_circle(Vector2(-420, -180), 220, Color("#98de84"))
+	draw_circle(Vector2(530, 260), 190, Color("#6cb85e"))
+	draw_circle(Vector2(740, -420), 170, Color("#9ae287"))
+	draw_circle(Vector2(-120, 380), 150, Color("#83cf72"))
+	draw_circle(Vector2(180, -300), 180, Color("#5ba650"))
+	draw_circle(Vector2(-760, 220), 130, Color("#a4e68e"))
+	draw_circle(Vector2(860, 120), 110, Color("#70c263"))
+
+	# Cartoon road crossing with stone+dirt styling.
+	var road_vertical := Rect2(Vector2(-78, -MAP_SIZE.y / 2.0), Vector2(156, MAP_SIZE.y))
+	var road_horizontal := Rect2(Vector2(-MAP_SIZE.x / 2.0, -86), Vector2(MAP_SIZE.x, 172))
+	draw_rect(road_vertical, Color("#9e8a73"), true)
+	draw_rect(road_horizontal, Color("#9e8a73"), true)
+	draw_rect(road_vertical.grow(-18), Color("#8a745f"), true)
+	draw_rect(road_horizontal.grow(-18), Color("#8a745f"), true)
+
+	for i in range(-10, 11):
+		var x := i * 72.0
+		draw_circle(Vector2(x, 0), 10, Color("#a99680"))
+	for j in range(-8, 9):
+		var y := j * 72.0
+		draw_circle(Vector2(0, y), 10, Color("#a99680"))
 
 
 func _draw_townhall() -> void:
