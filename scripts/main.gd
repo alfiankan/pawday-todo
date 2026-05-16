@@ -9,6 +9,9 @@ const TOWNHALL_SIZE := Vector2(180, 150)
 var is_dragging := false
 var drag_start_mouse := Vector2.ZERO
 var drag_start_camera := Vector2.ZERO
+var touch_points := {}
+var pinch_start_distance := 0.0
+var pinch_start_zoom := Vector2.ONE
 
 func _ready() -> void:
 	camera.position = Vector2.ZERO
@@ -33,8 +36,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		queue_redraw()
 	elif event is InputEventScreenDrag:
 		var screen_drag := event as InputEventScreenDrag
-		camera.position = _clamp_camera(camera.position - screen_drag.relative / camera.zoom)
-		queue_redraw()
+		touch_points[screen_drag.index] = screen_drag.position
+		if touch_points.size() >= 2:
+			_handle_pinch_zoom()
+		elif touch_points.size() == 1:
+			camera.position = _clamp_camera(camera.position - screen_drag.relative / camera.zoom)
+			queue_redraw()
+	elif event is InputEventScreenTouch:
+		var screen_touch := event as InputEventScreenTouch
+		if screen_touch.pressed:
+			touch_points[screen_touch.index] = screen_touch.position
+			if touch_points.size() == 2:
+				pinch_start_distance = _get_touch_distance()
+				pinch_start_zoom = camera.zoom
+		else:
+			touch_points.erase(screen_touch.index)
+			if touch_points.size() < 2:
+				pinch_start_distance = 0.0
 
 
 func _draw() -> void:
@@ -45,18 +63,18 @@ func _draw() -> void:
 
 func _draw_map() -> void:
 	var top_left := -MAP_SIZE / 2.0
-	draw_rect(Rect2(top_left, MAP_SIZE), Color("#7fba74"), true)
+	draw_rect(Rect2(top_left, MAP_SIZE), Color("#6fb264"), true)
 
 	for x in range(int(top_left.x), int(top_left.x + MAP_SIZE.x) + 1, int(TILE_SIZE)):
-		draw_line(Vector2(x, top_left.y), Vector2(x, top_left.y + MAP_SIZE.y), Color(1, 1, 1, 0.12), 2.0)
+		draw_line(Vector2(x, top_left.y), Vector2(x, top_left.y + MAP_SIZE.y), Color(0.2, 0.35, 0.2, 0.14), 2.0)
 	for y in range(int(top_left.y), int(top_left.y + MAP_SIZE.y) + 1, int(TILE_SIZE)):
-		draw_line(Vector2(top_left.x, y), Vector2(top_left.x + MAP_SIZE.x, y), Color(1, 1, 1, 0.12), 2.0)
+		draw_line(Vector2(top_left.x, y), Vector2(top_left.x + MAP_SIZE.x, y), Color(0.2, 0.35, 0.2, 0.14), 2.0)
 
-	draw_circle(Vector2(-420, -180), 140, Color("#78ab69"))
-	draw_circle(Vector2(530, 260), 190, Color("#70a262"))
-	draw_circle(Vector2(740, -420), 120, Color("#8ccf7a"))
-	draw_rect(Rect2(Vector2(-60, -MAP_SIZE.y / 2.0), Vector2(120, MAP_SIZE.y)), Color("#cba56a"), true)
-	draw_rect(Rect2(Vector2(-MAP_SIZE.x / 2.0, -70), Vector2(MAP_SIZE.x, 140)), Color("#cba56a"), true)
+	draw_circle(Vector2(-420, -180), 200, Color("#7cc66e"))
+	draw_circle(Vector2(530, 260), 170, Color("#66a85b"))
+	draw_circle(Vector2(740, -420), 150, Color("#88cf79"))
+	draw_circle(Vector2(-120, 380), 130, Color("#75bd69"))
+	draw_circle(Vector2(180, -300), 160, Color("#5f9d56"))
 
 
 func _draw_townhall() -> void:
@@ -92,7 +110,7 @@ func _draw_hud_hint() -> void:
 	draw_string(
 		ThemeDB.fallback_font,
 		hint_rect.position + Vector2(16, 30) / camera.zoom,
-		"Drag the map. Scroll to zoom.",
+		"Drag the map. Scroll or pinch to zoom.",
 		HORIZONTAL_ALIGNMENT_LEFT,
 		-1,
 		int(20 / camera.zoom.x),
@@ -105,6 +123,27 @@ func _set_zoom(value: Vector2) -> void:
 	camera.zoom = Vector2(clamped, clamped)
 	camera.position = _clamp_camera(camera.position)
 	queue_redraw()
+
+
+func _handle_pinch_zoom() -> void:
+	if pinch_start_distance <= 0.0:
+		pinch_start_distance = _get_touch_distance()
+		pinch_start_zoom = camera.zoom
+		return
+	var current_distance := _get_touch_distance()
+	if current_distance <= 0.0:
+		return
+	var zoom_factor := pinch_start_distance / current_distance
+	_set_zoom(pinch_start_zoom * zoom_factor)
+
+
+func _get_touch_distance() -> float:
+	if touch_points.size() < 2:
+		return 0.0
+	var points := touch_points.values()
+	var first: Vector2 = points[0]
+	var second: Vector2 = points[1]
+	return first.distance_to(second)
 
 
 func _clamp_camera(target: Vector2) -> Vector2:
